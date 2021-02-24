@@ -48,11 +48,11 @@ class Page(defaultSize: Int) {
     bufferWrapper.writeBytes(src, position)
   }
 
+  def readInt: Int = bufferWrapper.readInt()
+
   def readIntPos(position: Int): Int = bufferWrapper.readIntPos(position)
 
-  def readStringWithNull: String = {
-    bufferWrapper.readStringWithNull
-  }
+  def readStringWithNull: String = bufferWrapper.readStringWithNull
 
   /**
     * 剩余多少freeSpace

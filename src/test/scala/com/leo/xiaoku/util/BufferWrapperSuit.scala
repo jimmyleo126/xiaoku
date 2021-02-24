@@ -49,4 +49,12 @@ class BufferWrapperSuit {
     bufferWrapper.writeInt(i)
     println(bufferWrapper.readIntPos(0))
   }
+
+  @Test
+  def readStringWithNull(): Unit = {
+    val bufferWrapper = new BufferWrapper(7)
+    readFromFile(bufferWrapper)
+    bufferWrapper.readStringWithNull
+    print(new String(bufferWrapper.getBuffer))
+  }
 }

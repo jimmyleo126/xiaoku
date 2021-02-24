@@ -2,6 +2,8 @@ package com.leo.xiaoku.util
 
 import com.leo.xiaoku.internal.Logging
 
+import scala.util.control.Breaks
+
 private[xiaoku] class BufferWrapper(private val buffer: Array[Byte]) extends Logging{
 
   // 写索引
@@ -105,7 +107,7 @@ private[xiaoku] class BufferWrapper(private val buffer: Array[Byte]) extends Log
   }
 
   def readStringWithNull: String = {
-    new String()
+    new String(readBytesWithNull)
   }
 
   def readBytesWithNull: Array[Byte] = {
@@ -114,8 +116,32 @@ private[xiaoku] class BufferWrapper(private val buffer: Array[Byte]) extends Log
       null
     }
     var offset = -1
-    for (i <- readIndex until length) {
-      if
+    // todo 可以用scala Array index 日后来改 待测试
+    offset = b.indexOf(0, readIndex)
+    /*val loop = new Breaks
+    loop.breakable{
+      for (i <- readIndex until length) {
+        if (b(i) == 0) {
+          offset = i
+          loop.break()
+        }
+      }
+    }*/
+    offset match {
+      case -1 =>
+        val ab1 = new Array[Byte](length - readIndex)
+        System.arraycopy(b, readIndex, ab1, 0, ab1.length)
+        readIndex = length
+        ab1
+      case 0 =>
+        readIndex += 1
+        null
+      case _ =>
+        val ab2 = new Array[Byte](offset - readIndex)
+        System.arraycopy(b, readIndex, ab2, 0, ab2.length)
+        readIndex = offset + 1
+        ab2
     }
+
   }
 }

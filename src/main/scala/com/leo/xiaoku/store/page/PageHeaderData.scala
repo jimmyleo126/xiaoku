@@ -7,7 +7,7 @@ class PageHeaderData(size: Int) {
   // todo 变的时候 需要同步更新这里
   val PAGE_HEADER_SIZE = 24
   // Page开头的magicWorld
-  val magicWord = "Freedom"
+  var magicWord = "Freedom"
   // free space的起始偏移
   var lowerOffset: Int = _
   // 指向pageHeader中的lowerOffset起始位置
@@ -65,12 +65,19 @@ class PageHeaderData(size: Int) {
     page.writeInt(special)
     page.writeInt(tupleCount)
   }
+
+  def getTupleCount: Int = tupleCount
 }
 
 object PageHeaderData {
 
   def read(page: Page): PageHeaderData = {
     val pageHeaderData = new PageHeaderData(page.getLength)
-    pageHeaderData.magicWord = page.readString
+    pageHeaderData.magicWord = page.readStringWithNull
+    pageHeaderData.lowerOffset = page.readInt
+    pageHeaderData.upperOffset = page.readInt
+    pageHeaderData.special = page.readInt
+    pageHeaderData.tupleCount = page.readInt
+    pageHeaderData
   }
 }

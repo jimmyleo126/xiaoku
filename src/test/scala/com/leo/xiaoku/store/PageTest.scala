@@ -43,4 +43,11 @@ class PageTest {
 
 
   }
+
+  @Test
+  def readString(): Unit = {
+    val fStore = new FStore(SystemConfig.FREEDOM_REL_PATH)
+    fStore.open()
+
+  }
 }

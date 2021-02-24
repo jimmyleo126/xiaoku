@@ -5,10 +5,12 @@ import com.leo.xiaoku.meta.Tuple
 class PageLoader(page: Page) {
 
   private val tuples: Array[Tuple] = null
-  private val tupleCount: Int = _
+  private var tupleCount: Int = _
 
   def load: Unit = {
-    val pageHeaderData = PageHead
+    val pageHeaderData = PageHeaderData.read(page)
+    tupleCount = pageHeaderData.getTupleCount
+
   }
 
 
