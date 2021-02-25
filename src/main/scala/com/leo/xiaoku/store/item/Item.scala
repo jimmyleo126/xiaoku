@@ -58,7 +58,7 @@ class ItemData(tuple: Tuple) {
     // 找到写入的位置
     val writePosition = page.getUpperOffset - tupleLength
     // 写入数据
-    page.writeBytes(tuple.getBytes(), writePosition)
+    page.writeBytes(tuple.getBytes, writePosition)
     // 更新upperOffset
     page.modifyUpperOffset(writePosition)
     // 更新ItemData的offset，length
@@ -94,4 +94,8 @@ class ItemPointer(var offset: Int, val tupleLength: Int) {
   }
 
   def getPtrLength: Int = 8
+
+  def getOffset: Int = offset
+
+  def getTupleLength: Int = tupleLength
 }

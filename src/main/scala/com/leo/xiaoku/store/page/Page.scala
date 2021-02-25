@@ -54,6 +54,8 @@ class Page(defaultSize: Int) {
 
   def readStringWithNull: String = bufferWrapper.readStringWithNull
 
+  def readBytes(position: Int, length: Int): Array[Byte] = bufferWrapper.readBytes(position, length)
+
   /**
     * 剩余多少freeSpace
     * @return

@@ -1,16 +1,19 @@
 package com.leo.xiaoku.meta
 
 import com.leo.xiaoku.meta.value.Value
+import com.leo.xiaoku.util.BufferWrapper
 
 import scala.collection.mutable
 
 class Tuple(values: Array[Value]) {
 
   // 元组中的值
-//   var values: Array[Value] = _
+//   private var values: Array[Value] = _
+
+  def this() =  this(null)
 
   // 获取其byte
-  def getBytes() = {
+  def getBytes: Array[Byte] = {
     val bb = new Array[Byte](getLength)
     var postition = 0
     for (value <- values) {
@@ -18,6 +21,11 @@ class Tuple(values: Array[Value]) {
       postition += value.getLength
     }
     bb
+  }
+
+  def read(bytes: Array[Byte]): Unit = {
+    val wrapper = new BufferWrapper(bytes)
+
   }
 
   def getLength: Int = {

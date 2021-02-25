@@ -144,4 +144,19 @@ private[xiaoku] class BufferWrapper(private val buffer: Array[Byte]) extends Log
     }
 
   }
+
+  /**
+    *
+    * @param position 指定位置
+    * @param length 目标长度
+    * @return
+    */
+  def readBytes(position: Int, length: Int):Array[Byte] = {
+    val b = this.buffer
+    // todo 可以scala 数组切分API val k = b.slice(position, length)
+    val result = new Array[Byte](length)
+    // 拷贝原数据到新的byte中
+    System.arraycopy(b, position, result, 0, length)
+    result
+  }
 }

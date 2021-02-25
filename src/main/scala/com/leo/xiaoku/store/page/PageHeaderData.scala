@@ -67,6 +67,8 @@ class PageHeaderData(size: Int) {
   }
 
   def getTupleCount: Int = tupleCount
+
+  def getLength: Int = headerLength
 }
 
 object PageHeaderData {
