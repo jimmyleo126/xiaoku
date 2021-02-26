@@ -7,7 +7,7 @@ import jdk.management.resource.internal.ApproverGroup
 class Page(defaultSize: Int) {
 
   protected val pageHeaderData: PageHeaderData = new PageHeaderData(defaultSize)
-  protected val bufferWrapper: BufferWrapper = new BufferWrapper(new Array[Byte](defaultSize))
+  protected var bufferWrapper: BufferWrapper = new BufferWrapper(new Array[Byte](defaultSize))
   protected var length: Int = defaultSize
   pageHeaderData.write(this)
   // 是否是脏页，如果是脏页的话，需要写入
@@ -25,6 +25,10 @@ class Page(defaultSize: Int) {
     } else {
       false
     }
+  }
+
+  def read(buffer: Array[Byte]): Unit = {
+    bufferWrapper = new BufferWrapper(buffer)
   }
 
   def writeInt(i: Int): Unit = {

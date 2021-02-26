@@ -40,6 +40,11 @@ class PageTest {
     val fStore = new FStore(SystemConfig.FREEDOM_REL_PATH)
     fStore.open()
     fStore.writePageToFile(page, 0)
+    val pageLoader = fStore.readPageLoaderFromFile(0)
+    val tuples = pageLoader.getTuples
+    for (tuple <- tuples) {
+      println(tuple)
+    }
 
 
   }

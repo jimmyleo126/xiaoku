@@ -8,10 +8,10 @@ class PageLoader(page: Page) {
   private var tuples: Array[Tuple] = _
   private var tupleCount: Int = _
 
-  def load: Unit = {
+  def load(): Unit = {
     val pageHeaderData = PageHeaderData.read(page)
     tupleCount = pageHeaderData.getTupleCount
-    val ptrStartOff = pageHeaderData.getLength
+    var ptrStartOff = pageHeaderData.getLength
     // 首先建立存储tuple数组
     tuples = new Array[Tuple](tupleCount)
     // 循环读取
@@ -21,9 +21,13 @@ class PageLoader(page: Page) {
       val bb = page.readBytes(ptr.getOffset, ptr.getTupleLength)
       val tuple = new Tuple
       tuple.read(bb)
-
+      tuples(i) = tuple
+      // 进入到下一个元组的位置
+      ptrStartOff += ptr.getTupleLength
     }
   }
 
+  def getTuples: Array[Tuple] = tuples
 
+  def getTupleCount: Int = tupleCount
 }
