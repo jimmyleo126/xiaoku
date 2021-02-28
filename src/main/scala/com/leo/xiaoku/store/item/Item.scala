@@ -37,6 +37,10 @@ class Item(tuple: Tuple) {
 
 }
 
+object Item {
+  def getItemLength(key: Tuple): Int = key.getLength + 8
+}
+
 /**
   * ItemData
   * 包装tuple,从而能够和page进行交互

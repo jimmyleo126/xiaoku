@@ -57,4 +57,11 @@ class BufferWrapperSuit {
     bufferWrapper.readStringWithNull
     print(new String(bufferWrapper.getBuffer))
   }
+
+  @Test
+  def testWriteReadInt(): Unit = {
+    val bufferWrapper = new BufferWrapper(4)
+    bufferWrapper.writeInt(789)
+    println(bufferWrapper.readInt())
+  }
 }

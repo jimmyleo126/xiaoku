@@ -7,7 +7,7 @@ class PageHeaderData(size: Int) {
   // todo 变的时候 需要同步更新这里
   val PAGE_HEADER_SIZE = 24
   // Page开头的magicWorld
-  var magicWord = "Freedom"
+  var magicWord = "Xiaoku"
   // free space的起始偏移
   var lowerOffset: Int = _
   // 指向pageHeader中的lowerOffset起始位置

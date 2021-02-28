@@ -1,5 +1,6 @@
 package com.leo.xiaoku.store.fs
 
+import java.io.File
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 
@@ -63,6 +64,13 @@ class FStore(filePath: String) {
     // 装载byte
     pageLoader.load
     pageLoader
+  }
+
+  def cleanFile: Unit = {
+    val file = new File(filePath)
+    if (file.exists() && !file.isDirectory) {
+      file.delete()
+    }
   }
 
 

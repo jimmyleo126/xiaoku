@@ -3,8 +3,12 @@ package com.leo.xiaoku.index
 import com.leo.xiaoku.config.SystemConfig
 import com.leo.xiaoku.meta.{Attribute, Relation}
 import com.leo.xiaoku.store.fs.FStore
+import com.leo.xiaoku.store.page.PageNoAllocator
 
-abstract class BaseIndex(relation: Relation, indexName: String, attributes: Array[Attribute]) extends Index{
+abstract class BaseIndex(
+                          relation: Relation,
+                          indexName: String,
+                          attributes: Array[Attribute]) extends Index{
 
   // 隶属哪个relation
 //  protected var relation: Relation = _
@@ -18,5 +22,10 @@ abstract class BaseIndex(relation: Relation, indexName: String, attributes: Arra
   protected val fStore = new FStore(path)
   fStore.open()
 
-//  protected val pageNoAllocator: =
+  protected val pageNoAllocator: PageNoAllocator = new PageNoAllocator
+
+  def getNextPageNo: Int = pageNoAllocator.getNextPageNo
+
+  abstract def flushToDisk()
+
 }

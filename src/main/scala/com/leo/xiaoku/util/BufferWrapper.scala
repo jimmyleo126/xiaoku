@@ -74,12 +74,14 @@ private[xiaoku] class BufferWrapper(private val buffer: Array[Byte]) extends Log
     writeIndex += 1
   }
 
+  def readByte: Byte = buffer({readIndex += 1; readIndex - 1})
+
   def readInt(): Int = {
     val b = this.buffer
-    var i = b({ writeIndex += 1; writeIndex - 1 }) & 0xff
-    i |= (b({ writeIndex += 1; writeIndex - 1 }) & 0xff) << 8
-    i |= (b({ writeIndex += 1; writeIndex - 1 }) & 0xff) << 16
-    i |= (b({ writeIndex += 1; writeIndex - 1 }) & 0xff) << 24
+    var i = b({ readIndex += 1; readIndex - 1 }) & 0xff
+    i |= (b({ readIndex += 1; readIndex - 1 }) & 0xff) << 8
+    i |= (b({ readIndex += 1; readIndex - 1 }) & 0xff) << 16
+    i |= (b({ readIndex += 1; readIndex - 1 }) & 0xff) << 24
     i
   }
 
@@ -145,6 +147,15 @@ private[xiaoku] class BufferWrapper(private val buffer: Array[Byte]) extends Log
 
   }
 
+  def readBytes(length: Int): Array[Byte] = {
+    val b = this.buffer
+    val result = new Array[Byte](length)
+    // 拷贝原数据到新的Byte中
+    System.arraycopy(b, readIndex, result, 0, length)
+    readIndex += length
+    result
+  }
+
   /**
     *
     * @param position 指定位置
@@ -159,4 +170,6 @@ private[xiaoku] class BufferWrapper(private val buffer: Array[Byte]) extends Log
     System.arraycopy(b, position, result, 0, length)
     result
   }
+
+  def remaining: Int = length - readIndex
 }

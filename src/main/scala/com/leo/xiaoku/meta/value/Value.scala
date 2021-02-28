@@ -4,11 +4,11 @@ import com.leo.xiaoku.util.BufferWrapper
 
 private[xiaoku] abstract class Value {
 
-  val UNKNOWN: Byte = 100
-  val STRING: Byte = 1
-  val INT: Byte = 2
-  val LONG: Byte = 3
-  val BOOLEAN: Byte = 4
+  val UNKNOWN: Byte = Value.UNKNOWN
+  val STRING: Byte = Value.STRING
+  val INT: Byte = Value.INT
+  val LONG: Byte = Value.LONG
+  val BOOLEAN: Byte = Value.BOOLEAN
 
   def getLength: Int
 
@@ -20,17 +20,25 @@ private[xiaoku] abstract class Value {
 
   def compare(value: Value): Int
 
+  override def toString: String = super.toString
+
+}
+
+object Value {
+  val UNKNOWN: Byte = 100
+  val STRING: Byte = 1
+  val INT: Byte = 2
+  val LONG: Byte = 3
+  val BOOLEAN: Byte = 4
 }
 
 class ValueBoolean(var b: Boolean) extends Value {
 
 //  var b: Boolean = _
 
+  def this() = this(false)
 
-  override def getLength: Int = {
-    // 1 for type
-    1 + 1
-  }
+  override def getLength: Int = 1 + 1
 
   override def getType: Byte = BOOLEAN
 
@@ -56,9 +64,14 @@ class ValueBoolean(var b: Boolean) extends Value {
   override def compare(value: Value): Int = {
     0
   }
+
+  override def toString = s"ValueBoolean($b)"
 }
 
 class ValueInt(var i: Int) extends Value {
+
+  def this() = this(0)
+
   override def getLength: Int = 1 + 4
 
   override def getType: Byte = INT
@@ -88,9 +101,15 @@ class ValueInt(var i: Int) extends Value {
   }
 
   def getInt: Int = i
+
+
+  override def toString = s"ValueInt($i)"
 }
 
 class ValueLong(var l: Long) extends Value {
+
+  def this() = this(0)
+
   override def getLength: Int = 1 + 8
 
   override def getType: Byte = LONG
@@ -119,6 +138,9 @@ class ValueLong(var l: Long) extends Value {
   }
 
   def getLong: Long = l
+
+
+  override def toString = s"ValueLong($l)"
 }
 
 class ValueString(var s: String) extends Value {
@@ -153,4 +175,6 @@ class ValueString(var s: String) extends Value {
     this.s = s
     this
   }
+
+  override def toString = s"ValueString($s)"
 }
