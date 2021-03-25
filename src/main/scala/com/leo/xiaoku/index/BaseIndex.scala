@@ -26,6 +26,8 @@ abstract class BaseIndex(
 
   def getNextPageNo: Int = pageNoAllocator.getNextPageNo
 
+  def recyclePageNo(pageNo: Int): Unit = pageNoAllocator.recycleCount(pageNo)
+
   abstract def flushToDisk()
 
 }

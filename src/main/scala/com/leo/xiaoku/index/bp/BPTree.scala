@@ -28,4 +28,11 @@ class BPTree(
     // 深度遍历
 
   }
+
+  def getHead: BPNode = head
+
+  def setHead(head: BPNode): BPTree = {
+    this.head = head
+    this
+  }
 }

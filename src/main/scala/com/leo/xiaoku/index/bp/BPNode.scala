@@ -22,7 +22,7 @@ class BPNode(
   // 叶节点的后节点
   protected var next: BPNode = _
   // 节点的关键字
-  protected val entries: ListBuffer[Tuple] =  ListBuffer[Tuple]()
+  protected var entries: ListBuffer[Tuple] =  ListBuffer[Tuple]()
   // 子节点
   protected var children: ListBuffer[BPNode] = _
   // 页结构
@@ -70,9 +70,92 @@ class BPNode(
         innerInsert(key)
       } else {
         // 需要分裂
+        // 则分裂成左右两个节点
+        val left = new BPNode(true, bPTree)
+        val right = new BPNode(true, bPTree)
+        if (previous != null) {
+          previous.setNext(left)
+          left.setPrevious(previous)
+        }
+        if (next != null) {
+          next.setPrevious(right)
+          right.setNext(next)
+        }
+        if (previous == null) {
+          tree.setHead(left)
+        }
+        left.setNext(right)
+        right.setPrevious(left)
+        previous = null
+        next = null
+        // 插入后再分裂
+        innerInsert(key)
+        val leftSize = this.entries.size / 2
+        val rightSize = this.entries.size - leftSize
+
+        // 左右节点，分别赋值
+        for (i <- 0 until leftSize) {
+          left.getEntries += entries(i)
+        }
+        // 叶子节点需要全拷贝
+        for (i <- 0 until rightSize) {
+          right.getEntries += entries(leftSize + i)
+        }
+
+        // 表明当前节点不是根节点
+        if (parent != null) {
+          // 调整父子节点的关系
+          // 寻找到当前节点对应的index
+          val index = parent.getChildren.indexOf(this)
+          // 删掉当前节点
+          parent.getChildren.remove(index)
+          left.setParent(parent)
+          right.setParent(parent)
+          // 将节点增加到parent上面
+          parent.getChildren.insert(index, left)
+          parent.getChildren.insert(index + 1, right)
+          // 回收
+          recycle()
+          // 插入关键字
+          parent.innerInsert(right.getEntries.head)
+          // 更新
+          parent.up
+
+
+        }
 
       }
     }
+  }
+
+  protected def updateInsert(tree: BPTree): Unit = {
+    // 当前页面存不下，需要分裂
+    if (isNodeSplit) {
+      val left = new BPNode(false, bPTree)
+      val right = new BPNode(false, bPTree)
+      val leftSize = this.entries.size / 2
+      val rightSize = this.entries.size - leftSize
+      // 左边复制entry
+      for
+    }
+  }
+
+  def isNodeSplit: Boolean = {
+    if (bPPage.cacluateRemainFreeSpace > 0) {
+      return true
+    }
+    false
+  }
+
+  private def recycle(): Unit = {
+    setEntries(null)
+    setChildren(null)
+    bPTree.recyclePageNo(pageNo)
+  }
+
+  def setEntries(entries: ListBuffer[Tuple]): BPNode = {
+    this.entries = entries
+    this
   }
 
   /**
@@ -88,7 +171,7 @@ class BPNode(
     }
   }
 
-  def getEntries: List[Tuple] = entries.toList
+  def getEntries: ListBuffer[Tuple] = entries
 
   def isLeaf: Boolean = _isLeaf
 
@@ -97,6 +180,34 @@ class BPNode(
       return true
     }
     false
+  }
+
+  def getNext: BPNode = next
+
+  def setNext(next: BPNode): BPNode = {
+    this.next = next
+    this
+  }
+
+  def getPrevious: BPNode = previous
+
+  def setPrevious(previous: BPNode): BPNode = {
+    this.previous = previous
+    this
+  }
+
+  def getChildren: ListBuffer[BPNode] = children
+
+  def setChildren(children: ListBuffer[BPNode]): BPNode = {
+    this.children = children
+    this
+  }
+
+  def getParent: BPNode = parent
+
+  def setParent(parent: BPNode): BPNode = {
+    this.parent = parent
+    this
   }
 
 

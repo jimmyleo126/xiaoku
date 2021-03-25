@@ -16,4 +16,6 @@ class PageNoAllocator() {
     }
     freePageNoList.remove(0)
   }
+
+  def recycleCount(pageNo: Int): Unit = freePageNoList.add(pageNo)
 }
